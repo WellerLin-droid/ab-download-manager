@@ -16,27 +16,40 @@ import java.util.Properties
 
 plugins {
     id(Plugins.Android.application)
-    id(MyPlugins.kotlinAndroid)
-    id(MyPlugins.composeAndroid)
+    id(MyPlugins.composeBase)
     id(Plugins.ksp)
     id(Plugins.Kotlin.serialization)
     id(Plugins.aboutLibraries)
     id(Plugins.aboutLibrariesAndroid)
 }
+
+val jvmToolchainVersion = providers.gradleProperty("jvm.toolchain").get().toInt()
+kotlin {
+    jvmToolchain(jvmToolchainVersion)
+    compilerOptions {
+        freeCompilerArgs.set(
+            listOf(
+                "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                "-Xcontext-parameters",
+            )
+        )
+    }
+}
 android {
     defaultConfig {
-        minSdk = 26
+        minSdk = 33
         targetSdk = 36
         applicationId = getApplicationPackageName()
         versionCode = getAppVersion().convertToVersionCode()
         versionName = getAppVersionString()
     }
-    compileSdk = 36
+    compileSdk = 37
     namespace = "com.abdownloadmanager.android"
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
-            resValue("string", "app_short_name", "AB DM - Debug")
         }
     }
     buildFeatures {
