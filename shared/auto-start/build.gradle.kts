@@ -7,9 +7,9 @@ plugins {
 kotlin {
     jvm("desktop")
     android {
-        compileSdk = 36
+        compileSdk = 37
         namespace = "ir.amirab.util.startup"
-        minSdk = 26
+        minSdk = 33
     }
     sourceSets {
         commonMain.dependencies {

@@ -15,9 +15,9 @@ plugins {
 kotlin {
     jvm("desktop")
     android {
-        compileSdk = 36
+        compileSdk = 37
         namespace = "com.abdownloadmanager.shared"
-        minSdk = 26
+        minSdk = 33
     }
     sourceSets {
         commonMain.dependencies {
