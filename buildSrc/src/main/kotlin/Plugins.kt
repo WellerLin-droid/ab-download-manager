@@ -23,6 +23,8 @@ object Plugins {
         private const val baseName = "com.android"
         const val application = "$baseName.application"
         const val library = "$baseName.library"
+        /** AGP 9.x+ 中替代 library + kotlin multiplatform 的组合插件 */
+        const val multiplatformLibrary = "$baseName.kotlin.multiplatform.library"
     }
 
     const val ksp = "com.google.devtools.ksp"
