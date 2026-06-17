@@ -36,7 +36,7 @@ data class AppSettingsModel(
     override val showDownloadProgressDialog: Boolean = true,
     override val showDownloadCompletionDialog: Boolean = true,
     override val speedLimit: Long = 0,
-    override val autoStartOnBoot: Boolean = true,
+    override val autoStartOnBoot: Boolean = false,
     override val notificationSound: Boolean = true,
     override val generalNotificationSound: String = "",
     override val successNotificationSound: String = "",
