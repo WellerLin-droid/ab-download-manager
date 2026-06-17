@@ -22,6 +22,7 @@
             android:usesCleartextTraffic="true"
             android:requestLegacyExternalStorage="true"
             android:label="@string/app_short_name"
+            android:description="@string/module_description"
     >
         <activity
                 android:name=".ui.MainActivity"
@@ -133,6 +134,27 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_paths"/>
         </provider>
+
+        <!-- LSPosed 模块设置入口 Activity -->
+        <activity
+                android:name=".lsp.LSPModuleActivity"
+                android:exported="true"
+                android:theme="@style/Theme.ABDownloadManager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
+            </intent-filter>
+        </activity>
+
+        <!-- Xposed 模块声明（兼容旧框架） -->
+        <meta-data
+                android:name="xposedminversion"
+                android:value="101" />
+
+        <!-- 模块描述 -->
+        <meta-data
+                android:name="xposeddescription"
+                android:value="@string/module_description" />
 
     </application>
 </manifest>

@@ -1,0 +1,4 @@
+# LSPosed Modern 格式
+minApiVersion=101
+targetApiVersion=102
+staticScope=true
