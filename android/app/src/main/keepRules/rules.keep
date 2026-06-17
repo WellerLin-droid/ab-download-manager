@@ -1,0 +1,18 @@
+# LSPosed 模块入口类 - 通过 java_init.list 反射加载
+-keep class com.abdownloadmanager.android.lsp.ABDManagerXposedModule { *; }
+
+# LSP 模块设置 Activity - AndroidManifest.xml 声明
+-keep class com.abdownloadmanager.android.lsp.LSPModuleActivity { *; }
+
+# libxposed API - compileOnly，由 LSPosed 框架提供
+-dontwarn io.github.libxposed.**
+
+# m3u8 库引用的编译期注解（immutables），运行时不存在
+-dontwarn org.immutables.value.**
+
+# 适配资源文件内容（混淆后自动更新类名引用）
+-adaptresourcefilecontents META-INF/xposed/java_init.list
+
+# ===== Kotlin =====
+-keepattributes *Annotation*,RuntimeVisibleAnnotations,LineNumberTable,SourceFile,Signature
+-keep class kotlin.Metadata { *; }

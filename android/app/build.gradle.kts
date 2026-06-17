@@ -65,10 +65,18 @@ android {
     }
     buildTypes {
         debug {
+            isMinifyEnabled = false
+            isDebuggable = false
             applicationIdSuffix = ".debug"
         }
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
             signingConfig = signingConfigs.findByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt")
+            )
         }
     }
     buildFeatures {
@@ -80,11 +88,22 @@ android {
 dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.compose.foundation)
+    // MIUIX 组件库
+    implementation(libs.miuix.ui.android)
+    implementation(libs.miuix.blur.android)
+    implementation(libs.miuix.preference.android)
+    implementation(libs.miuix.icons.android)
+    implementation(libs.miuix.navigation3.ui.android)
+    implementation(libs.miuix.squircle.android)
     implementation(libs.androidx.activity.compose)
     implementation(libs.decompose.jbCompose)
     implementation(libs.aboutLibraries.core)
     implementation(project(":shared:app"))
     ksp(libs.arrow.opticKsp)
+
+    // LSPosed / libxposed API (compileOnly - provided by LSPosed framework at runtime)
+    compileOnly(libs.libxposed.api)
+    compileOnly(libs.libxposed.annotation)
 }
 
 androidEnableFileTypesGeneratorForManifest(
