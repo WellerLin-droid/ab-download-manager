@@ -9,12 +9,15 @@ plugins {
     id(MyPlugins.kotlinMultiplatform)
     id(MyPlugins.composeBase)
     id(Plugins.Kotlin.serialization)
-    id(Plugins.Android.library)
+    id(Plugins.Android.multiplatformLibrary)
     id(Plugins.buildConfig)
 }
 kotlin {
     jvm("desktop")
-    androidTarget("android") {
+    android {
+        compileSdk = 36
+        namespace = "com.abdownloadmanager.shared"
+        minSdk = 26
     }
     sourceSets {
         commonMain.dependencies {
@@ -64,13 +67,7 @@ kotlin {
     }
 }
 
-android {
-    compileSdk = 36
-    namespace = "com.abdownloadmanager.shared"
-    defaultConfig {
-        minSdk = 26
-    }
-}
+
 // generate a file with these constants
 buildConfig {
     packageName = "com.abdownloadmanager.shared"

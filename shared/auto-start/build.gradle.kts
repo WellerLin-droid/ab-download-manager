@@ -2,11 +2,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id(MyPlugins.kotlinMultiplatform)
-    id(Plugins.Android.library)
+    id(Plugins.Android.multiplatformLibrary)
 }
 kotlin {
     jvm("desktop")
-    androidTarget("android") {
+    android {
+        compileSdk = 36
+        namespace = "ir.amirab.util.startup"
+        minSdk = 26
     }
     sourceSets {
         commonMain.dependencies {
@@ -20,10 +23,4 @@ kotlin {
     }
 }
 
-android {
-    compileSdk = 36
-    namespace = "ir.amirab.util.startup"
-    defaultConfig {
-        minSdk = 26
-    }
-}
+
