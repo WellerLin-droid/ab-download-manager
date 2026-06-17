@@ -44,12 +44,31 @@ android {
         applicationId = getApplicationPackageName()
         versionCode = getAppVersion().convertToVersionCode()
         versionName = getAppVersionString()
+        ndk {
+            abiFilters += "arm64-v8a"
+        }
     }
     compileSdk = 37
     namespace = "com.abdownloadmanager.android"
+    signingConfigs {
+        create("release") {
+            val propsFile = rootProject.projectDir.resolve("local.properties")
+            if (propsFile.exists()) {
+                val props = Properties().apply { propsFile.inputStream().use { load(it) } }
+                val keystoreFileStr = props.getProperty("ABDM_KEYSTORE_FILE") ?: return@create
+                storeFile = rootProject.file(keystoreFileStr.removePrefix("file:"))
+                storePassword = props.getProperty("ABDM_KEYSTORE_FILE_PASSWORD")
+                keyAlias = props.getProperty("ABDM_KEYSTORE_KEY_ALIAS")
+                keyPassword = props.getProperty("ABDM_KEYSTORE_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+        }
+        release {
+            signingConfig = signingConfigs.findByName("release")
         }
     }
     buildFeatures {
