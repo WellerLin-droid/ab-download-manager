@@ -39,6 +39,13 @@ androidx-core = "1.19.0"
 androidx-activity-compose = "1.13.0"
 slf4jApi = "2.0.18"
 
+# libxposed
+libxposedApi = "102.0.0"
+libxposedAnnotation = "1.0.0"
+
+# MIUIX
+miuix = "0.9.2"
+
 [libraries]
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -90,6 +97,14 @@ compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.re
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 
+# MIUIX
+miuix-ui-android = { module = "top.yukonga.miuix.kmp:miuix-ui-android", version.ref = "miuix" }
+miuix-blur-android = { module = "top.yukonga.miuix.kmp:miuix-blur-android", version.ref = "miuix" }
+miuix-preference-android = { module = "top.yukonga.miuix.kmp:miuix-preference-android", version.ref = "miuix" }
+miuix-icons-android = { module = "top.yukonga.miuix.kmp:miuix-icons-android", version.ref = "miuix" }
+miuix-navigation3-ui-android = { module = "top.yukonga.miuix.kmp:miuix-navigation3-ui-android", version.ref = "miuix" }
+miuix-squircle-android = { module = "top.yukonga.miuix.kmp:miuix-squircle-android", version.ref = "miuix" }
+
 semver = { module = "io.github.z4kn4fein:semver", version.ref = "semver" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 
@@ -126,6 +141,10 @@ kotlinFileWatcher = { module = "io.github.irgaly.kfswatch:kfswatch", version.ref
 composeNativeTray = { module = "io.github.kdroidfilter:composenativetray", version.ref = "composeNativeTray" }
 proxyVole = { module = "org.bidib.com.github.markusbernhardt:proxy-vole", version.ref = "proxyVole" }
 jbrApi = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
+
+# libxposed
+libxposed-api = { module = "io.github.libxposed:api", version.ref = "libxposedApi" }
+libxposed-annotation = { module = "io.github.libxposed:annotation", version.ref = "libxposedAnnotation" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
