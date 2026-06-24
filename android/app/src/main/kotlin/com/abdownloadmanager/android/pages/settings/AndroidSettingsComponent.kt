@@ -61,6 +61,7 @@ class AndroidSettingsComponent(
             ConfigurableGroup(
                 nestedConfigurable = listOf(
                     CommonSettings.autoStartConfig(appSettings),
+                    AndroidSettings.enableDownloadFocusNotification(appSettings),
 //                            DesktopSettings.useSystemTray(appSettings),
                 )
             ),

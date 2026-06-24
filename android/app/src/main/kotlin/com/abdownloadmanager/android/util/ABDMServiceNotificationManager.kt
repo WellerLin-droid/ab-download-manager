@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.abdownloadmanager.android.R
 import com.abdownloadmanager.android.pages.singledownload.SingleDownloadPageActivity
 import com.abdownloadmanager.android.service.KeepAliveServiceReason
+import com.abdownloadmanager.android.storage.AppSettingsStorage
 import com.abdownloadmanager.android.ui.MainActivity
 import com.abdownloadmanager.resources.Res
 import com.abdownloadmanager.shared.util.SizeAndSpeedUnitProvider
@@ -28,6 +29,7 @@ import ir.amirab.downloader.monitor.IDownloadMonitor
 import ir.amirab.downloader.monitor.ProcessingDownloadItemState
 import ir.amirab.util.compose.asStringSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.sample
@@ -40,8 +42,12 @@ class ABDMServiceNotificationManager(
     private val scope: CoroutineScope,
     private val downloadEvents: DownloadManagerMinimalControl,
     private val sizeAndSpeedUnitProvider: SizeAndSpeedUnitProvider,
+    private val appSettingsStorage: AppSettingsStorage,
 ) {
     private val _keepAliveServiceReason: MutableStateFlow<KeepAliveServiceReason?> = MutableStateFlow(null)
+
+    // 跟踪各下载项是否已发送过首次焦点通知
+    private val firstNotifySent = mutableSetOf<Long>()
 
     fun setKeepAliveServiceReason(reason: KeepAliveServiceReason?) {
         _keepAliveServiceReason.value = reason
@@ -122,6 +128,9 @@ class ABDMServiceNotificationManager(
     }
 
     private fun dismissDownloadNotification(downloadId: Long) {
+        synchronized(firstNotifySent) {
+            firstNotifySent.remove(downloadId)
+        }
         notificationManagerCompat.cancel(getNotificationIdForDownloadItem(downloadId))
     }
 
@@ -206,7 +215,9 @@ class ABDMServiceNotificationManager(
             convertTimeRemainingToHumanReadable(it, TimeNames.ShortNames)
         }
         val speed = convertPositiveSpeedToHumanReadable(downloadItemState.speed, speedUnit)
-        val statusString = listOfNotNull(speed, eta)
+        val speedText = speed.ifBlank { null }
+        val etaText = eta?.ifBlank { null }
+        val statusString = listOfNotNull(speedText, etaText)
             .joinToString(" - ")
             .takeIf { it.isNotEmpty() }
 
@@ -220,7 +231,16 @@ class ABDMServiceNotificationManager(
             flagOfPendingIntent
         )
         val status = downloadItemState.status
-        return NotificationCompat
+        // 检查是否启用焦点通知，提前构建 focus extras
+        val focusEnabled = appSettingsStorage.enableDownloadFocusNotification.value
+        val isFirstNotify = if (focusEnabled) synchronized(firstNotifySent) {
+            firstNotifySent.add(downloadItemState.id)
+        } else false
+        val activeCount = if (focusEnabled) synchronized(firstNotifySent) {
+            firstNotifySent.size
+        } else 0
+
+        val notificationBuilder = NotificationCompat
             .Builder(context, AndroidConstants.NOTIFICATION_DOWNLOAD_CHANEL_ID)
             .setContentTitle(title)
             .setContentText(statusString)
@@ -270,10 +290,25 @@ class ABDMServiceNotificationManager(
                 }
             }
             .setContentIntent(openMainActivityIntent)
-            .build()
+
+        // 在 build() 之前注入焦点通知 extras
+        if (focusEnabled) {
+            val focusExtras = DownloadFocusNotificationHelper.buildFocusExtras(
+                context = context,
+                speedText = speedText ?: "",
+                etaText = etaText,
+                percent = downloadItemState.percent,
+                isFirstNotify = isFirstNotify,
+                activeDownloadCount = activeCount,
+            )
+            notificationBuilder.addExtras(focusExtras)
+        }
+
+        return notificationBuilder.build()
     }
 
     @Composable
+    @OptIn(FlowPreview::class)
     fun RenderNotifications(
         downloadMonitor: IDownloadMonitor
     ) {

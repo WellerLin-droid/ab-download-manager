@@ -55,6 +55,7 @@ data class AppSettingsModel(
     override val useCategoryByDefault: Boolean = true,
     override val userAgent: String = "",
     val browserIconInLauncher: Boolean = false,
+    val enableDownloadFocusNotification: Boolean = true,
 ) : IAppSettingsModel {
     companion object {
         val default: AppSettingsModel get() = AppSettingsModel()
@@ -100,6 +101,7 @@ data class AppSettingsModel(
             val useCategoryByDefault = booleanKeyOf("useCategoryByDefault")
             val userAgent = stringKeyOf("userAgent")
             val browserIconInLauncher = booleanKeyOf("browserIconInLauncher")
+        val enableDownloadFocusNotification = booleanKeyOf("enableDownloadFocusNotification")
         }
 
 
@@ -150,6 +152,8 @@ data class AppSettingsModel(
                 useCategoryByDefault = source.get(Keys.useCategoryByDefault) ?: default.useCategoryByDefault,
                 userAgent = source.get(Keys.userAgent) ?: default.userAgent,
                 browserIconInLauncher = source.get(Keys.browserIconInLauncher) ?: default.browserIconInLauncher,
+            enableDownloadFocusNotification = source.get(Keys.enableDownloadFocusNotification)
+                ?: default.enableDownloadFocusNotification,
             )
         }
 
@@ -190,6 +194,7 @@ data class AppSettingsModel(
                 put(Keys.useCategoryByDefault, focus.useCategoryByDefault)
                 put(Keys.userAgent, focus.userAgent)
                 put(Keys.browserIconInLauncher, focus.browserIconInLauncher)
+                put(Keys.enableDownloadFocusNotification, focus.enableDownloadFocusNotification)
             }
         }
     }
@@ -267,4 +272,5 @@ class AppSettingsStorage(
     override val userAgent = from(AppSettingsModel.userAgent)
 
     val browserIconInLauncher = from(AppSettingsModel.browserIconInLauncher)
+    val enableDownloadFocusNotification = from(AppSettingsModel.enableDownloadFocusNotification)
 }

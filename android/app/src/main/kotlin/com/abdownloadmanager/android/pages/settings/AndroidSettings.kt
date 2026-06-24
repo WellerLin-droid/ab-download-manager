@@ -49,4 +49,22 @@ object AndroidSettings {
             }
         )
     }
+
+    fun enableDownloadFocusNotification(
+        appSettingsStorage: AppSettingsStorage
+    ): BooleanConfigurable {
+        return BooleanConfigurable(
+            title = Res.string.settings_enable_download_focus_notification.asStringSource(),
+            description = Res.string.settings_enable_download_focus_notification_summary.asStringSource(),
+            backedBy = appSettingsStorage.enableDownloadFocusNotification,
+            renderMode = BooleanConfigurable.RenderMode.Switch,
+            describe = {
+                if (it) {
+                    Res.string.enabled
+                } else {
+                    Res.string.disabled
+                }.asStringSource()
+            }
+        )
+    }
 }

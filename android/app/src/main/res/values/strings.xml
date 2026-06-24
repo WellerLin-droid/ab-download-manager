@@ -35,4 +35,8 @@
     <string name="lsp_dialog_cancel">取消</string>
     <string name="lsp_toast_restart_success">SystemUI 已重启</string>
     <string name="lsp_toast_restart_failed">重启失败</string>
+
+    <!-- 应用设置 - 通知 -->
+    <string name="settings_enable_download_focus_notification">启用下载焦点通知</string>
+    <string name="settings_enable_download_focus_notification_summary">下载时使用澎湃焦点通知显示进度</string>
 </resources>
