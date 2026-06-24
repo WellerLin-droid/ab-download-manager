@@ -73,6 +73,7 @@ dependencies {
 }
 
 aboutLibraries {
+    offlineMode = true
     export {
         prettyPrint = true
     }

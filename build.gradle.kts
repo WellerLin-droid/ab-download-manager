@@ -2,11 +2,10 @@ import buildlogic.CiUtils
 import buildlogic.versioning.getAppVersionString
 import io.github.z4kn4fein.semver.toVersion
 import io.github.z4kn4fein.semver.toVersionOrNull
-import ir.amirab.git_version.core.semanticVersionRegex
 import org.jetbrains.changelog.Changelog
+import java.util.Properties
 
 plugins {
-    ir.amirab.`git-version-plugin`
     /**
      * retrieve latest versions of dependencies
      */
@@ -14,23 +13,11 @@ plugins {
     id(Plugins.changeLog)
 }
 
-val defaultSemVersion = "1.0.0"
-val fallBackVersion = "$defaultSemVersion-untagged"
-
-gitVersion {
-    on {
-        branch(".+") {
-            "$defaultSemVersion-${it.refInfo.shortenName}-snapshot"
-        }
-        tag("v?${semanticVersionRegex}") {
-            it.matchResult.groups.get("version")!!.value
-        }
-        commit {
-            "$defaultSemVersion-sha.${it.refInfo.commitHash.take(5)}"
-        }
-    }
+val versionProps = Properties().apply {
+    rootProject.file("version.properties").inputStream().use { load(it) }
 }
-version = (gitVersion.getVersion() ?: fallBackVersion).toVersion()
+val versionName = versionProps.getProperty("versionName") ?: error("versionName not found in version.properties")
+version = versionName.toVersion()
 logger.lifecycle("version: $version")
 
 tasks.dependencyUpdates {

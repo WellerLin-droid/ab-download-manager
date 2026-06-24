@@ -1,8 +1,8 @@
 import buildlogic.CiDirs
 import buildlogic.CiUtils
-import buildlogic.versioning.convertToVersionCode
 import buildlogic.versioning.getAppName
 import buildlogic.versioning.getAppVersion
+import buildlogic.versioning.getAppVersionCode
 import buildlogic.versioning.getAppVersionString
 import buildlogic.versioning.getApplicationPackageName
 import com.android.build.api.artifact.SingleArtifact
@@ -38,11 +38,12 @@ kotlin {
     }
 }
 android {
+    ndkVersion = "30.0.14904198"
     defaultConfig {
         minSdk = 33
         targetSdk = 36
         applicationId = getApplicationPackageName()
-        versionCode = getAppVersion().convertToVersionCode()
+        versionCode = getAppVersionCode()
         versionName = getAppVersionString()
         ndk {
             abiFilters += "arm64-v8a"

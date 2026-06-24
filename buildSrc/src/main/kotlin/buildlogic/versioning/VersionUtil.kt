@@ -4,6 +4,7 @@ import io.github.z4kn4fein.semver.Version
 import ir.amirab.util.platform.Platform
 import org.gradle.api.Project
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
 
 fun Project.getAppVersion(): Version {
     return rootProject.version as Version
@@ -11,6 +12,15 @@ fun Project.getAppVersion(): Version {
 
 fun Project.getAppVersionString(): String {
     return rootProject.version.toString()
+}
+
+fun Project.getAppVersionCode(): Int {
+    val props = Properties()
+    val file = rootProject.projectDir.resolve("version.properties")
+    if (file.exists()) {
+        file.inputStream().use { props.load(it) }
+    }
+    return props.getProperty("versionCode")?.toIntOrNull() ?: 1
 }
 fun Version.convertToVersionCode(): Int {
     require(major in 0..1023) { "Major must be 0..1023" }
