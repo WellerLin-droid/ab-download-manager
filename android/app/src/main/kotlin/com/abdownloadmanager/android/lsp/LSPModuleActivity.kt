@@ -44,7 +44,6 @@ import top.yukonga.miuix.kmp.icon.extended.Refresh
 import top.yukonga.miuix.kmp.overlay.OverlayDialog
 import top.yukonga.miuix.kmp.preference.ArrowPreference
 import top.yukonga.miuix.kmp.preference.OverlayDropdownPreference
-import top.yukonga.miuix.kmp.preference.SwitchPreference
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 /**
@@ -73,7 +72,6 @@ private fun MainScreen() {
     val context = LocalContext.current
 
     // 设置状态
-    var unlockFocus by remember { mutableStateOf(true) }
     var rootManagerIndex by remember { mutableIntStateOf(0) }
     var showRestartDialog by remember { mutableStateOf(false) }
 
@@ -139,12 +137,6 @@ private fun MainScreen() {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
             ) {
-                SwitchPreference(
-                    checked = unlockFocus,
-                    onCheckedChange = { unlockFocus = it },
-                    title = stringResource(R.string.lsp_unlock_focus),
-                    summary = stringResource(R.string.lsp_unlock_focus_summary),
-                )
                 OverlayDropdownPreference(
                     items = rootManagerOptions,
                     selectedIndex = rootManagerIndex,
